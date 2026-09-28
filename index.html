@@ -206,8 +206,8 @@
     </div>
     <div class="tile">
       <span class="label">파이프라인 전체 반영 시</span>
-      <span class="value">+6.2%</span>
-      <span class="delta critical">목표 +10% 대비 -3.8%p 부족</span>
+      <span class="value">+12.7%</span>
+      <span class="delta good">목표 +10% 대비 +2.7%p</span>
     </div>
   </div>
 
@@ -236,12 +236,12 @@
     <div class="panel-head">
       <div>
         <p class="panel-title">EBITDA 브릿지 — 7월 기준 누적 효과</p>
-        <p class="panel-note">노션 [EBITDA 총력전]Action Item 41건, Drop 제외 (확정+파이프라인 31건 반영 · 시작 전 10건 별도) · 2026년 9월 28일 스냅샷</p>
+        <p class="panel-note">노션 [EBITDA 총력전]Action Item 41건, Drop 제외 · 시작 전 포함 전체 반영 · 2026년 9월 28일 스냅샷</p>
       </div>
       <div class="legend">
         <span class="key" style="color:var(--series-orange)"><span class="swatch" style="background:var(--series-orange)"></span>7월 기준</span>
         <span class="key" style="color:var(--series-aqua)"><span class="swatch" style="background:var(--series-aqua)"></span>확정 반영 (+0.1%p)</span>
-        <span class="key" style="color:var(--series-yellow)"><span class="swatch" style="background:var(--series-yellow)"></span>파이프라인 (+12.7%p)</span>
+        <span class="key" style="color:var(--series-yellow)"><span class="swatch" style="background:var(--series-yellow)"></span>파이프라인 (+19.2%p)</span>
         <span class="key" style="color:var(--series-blue)"><span class="swatch dash"></span>목표 +10%</span>
         <span class="key" style="color:var(--baseline)"><span class="swatch solid-line"></span>손익분기 0%</span>
       </div>
@@ -257,7 +257,7 @@
   </div>
 
   <footer>
-    환산 기준: 2026년 7월 매출액 약 2,091백만원 (EBITDA -138백만원 ÷ EBITDA율 -6.6%로 역산) · 약 20.9백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 확정 반영 = 임팩트 적용 완료만(200만원) · 파이프라인 = 업무 완료 + 진행중 + 선검토 진행중 + pending(2억 6,514만원)
+    환산 기준: 2026년 7월 매출액 약 2,091백만원 (EBITDA -138백만원 ÷ EBITDA율 -6.6%로 역산) · 약 20.9백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 확정 반영 = 임팩트 적용 완료만(200만원) · 파이프라인 = 업무 완료 + 진행중 + 선검토 진행중 + pending + 시작 전(4억 243만원)
   </footer>
 </div>
 
@@ -292,7 +292,7 @@
   var bridge = [
     {label:"7월 기준", from:0, to:-6.6, kind:"total", detail:"BBR 확정 실적"},
     {label:"+ 확정 반영", from:-6.6, to:-6.5, kind:"aqua", detail:"임팩트 적용완료만 · 200만원 · +0.1%p"},
-    {label:"+ 파이프라인 전체", from:-6.5, to:6.2, kind:"yellow", detail:"업무완료 + 진행중 + 선검토진행중 + pending · 2억 6,514만원 · +12.7%p"}
+    {label:"+ 파이프라인 전체", from:-6.5, to:12.7, kind:"yellow", detail:"업무완료 + 진행중 + 선검토진행중 + pending + 시작 전 · 4억 243만원 · +19.2%p"}
   ];
 
   var NS = "http://www.w3.org/2000/svg";
