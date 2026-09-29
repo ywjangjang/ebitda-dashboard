@@ -189,19 +189,19 @@
       <span class="delta critical">EBITDA -158백만원</span>
     </div>
     <div class="tile">
-      <span class="label">확정 반영 후</span>
-      <span class="value">-7.5%</span>
-      <span class="delta good">+0.1%p 개선</span>
+      <span class="label">실제 반영 후</span>
+      <span class="value">-7.6%</span>
+      <span class="delta critical">실제 임팩트 입력 대기</span>
     </div>
     <div class="tile">
       <span class="label">0% 도달까지</span>
-      <span class="value">7.5%p</span>
+      <span class="value">7.6%p</span>
       <span class="delta critical">아직 부족</span>
     </div>
     <div class="tile">
-      <span class="label">파이프라인 전체 반영 시</span>
-      <span class="value">+11.1%</span>
-      <span class="delta good">목표 +10% 대비 +1.1%p</span>
+      <span class="label">파이프라인 전체 달성 시 예상</span>
+      <span class="value">+11.9%</span>
+      <span class="delta good">목표 +10% 대비 +1.9%p</span>
     </div>
   </div>
 
@@ -230,11 +230,11 @@
     <div class="panel-head">
       <div>
         <p class="panel-title">파이프라인 전체 달성 예상 vs 실제 반영 — EBITDA 추이</p>
-        <p class="panel-note" id="gapNote">노션 [EBITDA 총력전]Action Item 34건, Drop 제외 · 2026년 9월 29일부터 주간 누적 추적 시작</p>
+        <p class="panel-note" id="gapNote">노션 [EBITDA 총력전]Action Item 44건, Drop 제외 · (예상)/(실제) 필드 분리 반영 · 2026년 9월 29일부터 주간 누적 추적 시작</p>
       </div>
       <div class="legend">
-        <span class="key" style="color:var(--series-orange)"><span class="swatch" style="background:var(--series-orange)"></span>실제 임팩트 반영 EBITDA</span>
-        <span class="key" style="color:var(--series-blue)"><span class="swatch dash"></span>파이프라인 전체 달성 시 예상 EBITDA (+11.1%)</span>
+        <span class="key" style="color:var(--series-orange)"><span class="swatch" style="background:var(--series-orange)"></span>실제 반영 임팩트 기준 EBITDA</span>
+        <span class="key" style="color:var(--series-blue)"><span class="swatch dash"></span>파이프라인 전체 달성 시 예상 EBITDA (+11.9%)</span>
         <span class="key" style="color:var(--text-muted)"><span class="swatch dash"></span>6월 기준 (베이스라인, -7.6%)</span>
         <span class="key" style="color:var(--baseline)"><span class="swatch solid-line"></span>손익분기 0%</span>
         <span class="key" style="color:var(--series-yellow)"><span class="swatch" style="background:var(--series-yellow)"></span>Gap</span>
@@ -247,11 +247,11 @@
 
   <div class="callout">
     <span>⚠️</span>
-    <span><b>주의:</b> 실제(주황) 선은 노션 상태가 '임팩트 적용 완료'로 바뀐 항목만 누적 집계합니다. 파란 점선(+11.1%)은 파이프라인(진행중 포함 전체) 항목이 모두 실현됐을 때의 예상 EBITDA율로, 위쪽 "파이프라인 전체 반영 시" 타일과 같은 값입니다. 두 값은 노션의 월 EBITDA 임팩트 합계가 바뀌면 함께 갱신됩니다.</span>
+    <span><b>주의:</b> 파란 점선(+11.9%)은 노션의 "(예상) 월 EBITDA 임팩트" — Drop 제외 44건 전체를 다 실현했을 때 원래 기대했던 EBITDA율입니다. 주황 실선은 "(실제) 월 EBITDA 임팩트"가 입력된 항목만 반영합니다 — 지금은 '임팩트 적용 완료' 3건을 포함해 이 필드가 아직 아무 항목에도 입력되지 않아서 실제 선이 베이스라인에 그대로 머물러 있어요. 담당자가 실제 수치를 입력하면 다음 갱신부터 반영됩니다.</span>
   </div>
 
   <footer>
-    환산 기준: 2026년 6월 매출액 약 2,079백만원 (EBITDA -158백만원 ÷ EBITDA율 -7.6%로 역산) · 약 20.8백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 확정 반영 = 임팩트 적용 완료만(200만원) · 파이프라인 = 업무 완료 + 진행중 + 선검토 진행중 + pending(3억 8,580만원)
+    환산 기준: 2026년 6월 매출액 약 2,079백만원 (EBITDA -158백만원 ÷ EBITDA율 -7.6%로 역산) · 약 20.8백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 파이프라인 전체 예상 = Drop 제외 44건의 "(예상) 월 EBITDA 임팩트" 합계(4억 569만원) · 실제 반영 = "(실제) 월 EBITDA 임팩트"가 입력된 항목 합계(현재 0원, 미입력)
   </footer>
 </div>
 
@@ -284,17 +284,20 @@
     }
   };
   // gapTrack.points grows by one entry every Monday: the scheduled weekly refresh
-  // computes that week's cumulative "임팩트 적용완료" sum from Notion and appends
-  // {label, value, cum, detail} to the end of this array — prior points are never
-  // edited or removed, so this is a running history. Week labels follow the BBR
-  // dashboard's own convention: "<월>월W<ISO주차>", where <월> is whichever month
-  // has more weekdays in that Mon–Fri business week (e.g. the week of 9/28–10/2
-  // is ISO week 40 and falls mostly in September, so it's "9월W40").
+  // sums Notion's "(실제) 월 EBITDA 임팩트" across items where that field has been
+  // filled in, and appends {label, value, cum, detail} to the end of this array —
+  // prior points are never edited or removed, so this is a running history. Week
+  // labels follow the BBR dashboard's own convention: "<월>월W<ISO주차>", where
+  // <월> is whichever month has more weekdays in that Mon–Fri business week (e.g.
+  // the week of 9/28–10/2 is ISO week 40 and falls mostly in September, so it's
+  // "9월W40"). gapTrack.target uses a DIFFERENT field — "(예상) 월 EBITDA 임팩트"
+  // summed across ALL non-Drop items — since it represents the original estimate
+  // for the whole pipeline, not what's actually been confirmed.
   var gapTrack = {
-    target: 11.1, // 파이프라인 전체(진행중 포함) 항목이 모두 실현됐을 때의 예상 EBITDA%. 노션 합계가 바뀌면 이 값도 다시 계산해서 넣어줄 것.
+    target: 11.9, // Drop 제외 전체 항목의 "(예상) 월 EBITDA 임팩트" 합계 기준. 노션 합계가 바뀌면 이 값도 다시 계산해서 넣어줄 것.
     points: [
       {label:"6월 기준", value:-7.6, cum:0, detail:"BBR 확정 실적 (베이스라인)"},
-      {label:"9월W40", value:-7.5, cum:2000000, detail:"임팩트 적용완료 누적 200만원 · +0.1%p"}
+      {label:"9월W40", value:-7.6, cum:0, detail:"(실제) 월 EBITDA 임팩트 필드가 아직 어느 항목에도 입력되지 않음 — 임팩트 적용완료 3건 포함"}
     ]
   };
 
@@ -415,7 +418,7 @@
     var svg = document.getElementById("chartGap");
     var pts = gapTrack.points;
     var target = gapTrack.target;
-    var W = 760, H = 300, padL = 40, padR = 90, padT = 16, padB = 30;
+    var W = 760, H = 300, padL = 40, padR = 128, padT = 16, padB = 30;
     var plotW = W - padL - padR, plotH = H - padT - padB;
 
     var vals = pts.map(function(p){return p.value;}).concat([target]);
@@ -446,7 +449,7 @@
     svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yTarget, y2:yTarget, class:"target-line"}));
     var targetLbl = el("text", {x:W-padR+6, y:yTarget+3.5, class:"ref-label"});
     targetLbl.setAttribute("fill", cssVar("--series-blue"));
-    targetLbl.textContent = "파이프라인 전체 예상 +" + target + "%";
+    targetLbl.textContent = "파이프라인 예상 +" + target + "%";
     svg.appendChild(targetLbl);
 
     var zeroLbl = el("text", {x:W-padR+6, y:yFor(0)+3.5, class:"ref-label"});
