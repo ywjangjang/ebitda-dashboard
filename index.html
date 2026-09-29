@@ -18,6 +18,7 @@
     --series-orange:#eb6834;
     --series-aqua:#1baf7a;
     --series-yellow:#eda100;
+    --series-red:#c9304f;
     --status-good:#0ca30c;
     --status-good-bg:#e7f6e2;
     --status-critical:#d03b3b;
@@ -41,6 +42,7 @@
       --series-orange:#d95926;
       --series-aqua:#199e70;
       --series-yellow:#c98500;
+      --series-red:#e14b6b;
       --status-good:#28c228;
       --status-good-bg:#123312;
       --status-critical:#e66767;
@@ -64,6 +66,7 @@
     --series-orange:#d95926;
     --series-aqua:#199e70;
     --series-yellow:#c98500;
+    --series-red:#e14b6b;
     --status-good:#28c228;
     --status-good-bg:#123312;
     --status-critical:#e66767;
@@ -184,7 +187,7 @@
 
   <div class="tiles">
     <div class="tile">
-      <span class="label">6월 EBITDA율 (기준점)</span>
+      <span class="label">6월 EBITDA율 실텬타))</span>
       <span class="value">-7.6%</span>
       <span class="delta critical">EBITDA -158백만원</span>
     </div>
@@ -233,11 +236,11 @@
         <p class="panel-note" id="gapNote">노션 [EBITDA 총력전]Action Item 44건, Drop 제외 · (예상)/(실제) 필드 분리 반영 · 2026년 9월 29일부터 주간 누적 추적 시작</p>
       </div>
       <div class="legend">
-        <span class="key" style="color:var(--series-orange)"><span class="swatch" style="background:var(--series-orange)"></span>실제 반영 임팩트 기준 EBITDA</span>
-        <span class="key" style="color:var(--series-blue)"><span class="swatch dash"></span>파이프라인 전체 달성 시 예상 EBITDA (+11.9%)</span>
+        <span class="key" style="color:var(--series-red)"><span class="swatch" style="background:var(--series-red)"></span>실제 반영 임팩트 기준 EBITDA</span>
+        <span class="key" style="color:var(--series-yellow)"><span class="swatch dash"></span>파이프라인 전체 달성 시 예상 EBITDA (+11.9%)</span>
         <span class="key" style="color:var(--text-muted)"><span class="swatch dash"></span>6월 기준 (베이스라인, -7.6%)</span>
         <span class="key" style="color:var(--baseline)"><span class="swatch solid-line"></span>손익분기 0%</span>
-        <span class="key" style="color:var(--series-yellow)"><span class="swatch" style="background:var(--series-yellow)"></span>Gap</span>
+        <span class="key" style="color:var(--text-muted)"><span class="swatch" style="background:var(--text-muted)"></span>Gap</span>
       </div>
     </div>
     <div class="chart-scroll"><svg class="chart" id="chartGap" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="파이프라인 전체 달성 예상 EBITDA 대비 실제 반영 EBITDA Gap 차트"></svg></div>
@@ -247,7 +250,7 @@
 
   <div class="callout">
     <span>⚠️</span>
-    <span><b>주의:</b> 파란 점선(+11.9%)은 노션의 "(예상) 월 EBITDA 임팩트" — Drop 제외 44건 전체를 다 실현했을 때 원래 기대했던 EBITDA율입니다. 주황 실선은 "(실제) 월 EBITDA 임팩트"가 입력된 항목만 반영합니다 — 지금은 '임팩트 적용 완료' 3건을 포함해 이 필드가 아직 아무 항목에도 입력되지 않아서 실제 선이 베이스라인에 그대로 머물러 있어요. 담당자가 실제 수치를 입력하면 다음 갱신부터 반영됩니다.</span>
+    <span><b>주의:</b> 노란 점선(+11.9%)은 노션의 "(예상) 월 EBITDA 임팩트" — Drop 제외 44건 전체를 다 실현했을 때 원래 기대했던 EBITDA율입니다. 빨간 실선은 "(실제) 월 EBITDA 임팩트"가 입력된 항목만 반영합니다 — 지금은 '임팩트 적용 완료' 3건을 포함해 이 필드가 아직 아무 항목에도 입력되지 않아서 실제 선이 베이스라인에 그대로 머물러 있어요. 담당자가 실제 수치를 입력하면 다음 갱신부터 반영됩니다.</span>
   </div>
 
   <footer>
@@ -442,13 +445,13 @@
     var gapPath = "M" + xFor(0).toFixed(1) + "," + yFor(target).toFixed(1);
     pts.forEach(function(p,i){ gapPath += " L" + xFor(i).toFixed(1) + "," + yFor(p.value).toFixed(1); });
     gapPath += " L" + xFor(pts.length-1).toFixed(1) + "," + yFor(target).toFixed(1) + " Z";
-    var gapFill = el("path", {d:gapPath, fill:cssVar("--series-yellow"), opacity:0.16, stroke:"none"});
+    var gapFill = el("path", {d:gapPath, fill:cssVar("--text-muted"), opacity:0.16, stroke:"none"});
     svg.appendChild(gapFill);
 
     var yTarget = yFor(target);
-    svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yTarget, y2:yTarget, class:"target-line"}));
+    svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yTarget, y2:yTarget, class:"target-line", style:"stroke:" + cssVar("--series-yellow")}));
     var targetLbl = el("text", {x:W-padR+6, y:yTarget+3.5, class:"ref-label"});
-    targetLbl.setAttribute("fill", cssVar("--series-blue"));
+    targetLbl.setAttribute("fill", cssVar("--series-yellow"));
     targetLbl.textContent = "파이프라인 예상 +" + target + "%";
     svg.appendChild(targetLbl);
 
@@ -475,7 +478,7 @@
     });
 
     var d = pts.map(function(p,i){ return (i===0?"M":"L") + xFor(i).toFixed(1) + "," + yFor(p.value).toFixed(1); }).join(" ");
-    svg.appendChild(el("path", {d:d, class:"actual-line"}));
+    svg.appendChild(el("path", {d:d, class:"actual-line", style:"stroke:" + cssVar("--series-red")}));
 
     var lastI = pts.length-1;
     var lastGap = target - pts[lastI].value;
@@ -486,15 +489,16 @@
     // in which case drop it below the dot instead.
     var endY = (lastY - 10 - yTarget > 12) ? lastY - 10 : lastY + 16;
     var endLbl = el("text", {x:lastX, y:endY, class:"value-label", "text-anchor":"middle"});
-    endLbl.setAttribute("fill", cssVar("--series-orange"));
+    endLbl.setAttribute("fill", cssVar("--series-red"));
     endLbl.textContent = (pts[lastI].value>0?"+":"") + pts[lastI].value + "%";
     svg.appendChild(endLbl);
 
     // Gap label sits centered within the shaded area (not in the right margin,
-    // which is reserved for the target/zero/baseline reference labels).
+    // which is reserved for the target/zero/baseline reference labels). Kept in
+    // neutral ink since red/yellow are both already claimed by the actual/target series.
     var gapMidX = (xFor(0) + lastX) / 2;
     var gapLbl = el("text", {x:gapMidX, y:(lastY+yTarget)/2 + 4, class:"value-label", "text-anchor":"middle"});
-    gapLbl.setAttribute("fill", cssVar("--series-yellow"));
+    gapLbl.setAttribute("fill", cssVar("--text-secondary"));
     gapLbl.textContent = "Gap " + lastGap.toFixed(1) + "%p";
     svg.appendChild(gapLbl);
 
@@ -503,7 +507,7 @@
 
     pts.forEach(function(p,i){
       var cx = xFor(i), cy = yFor(p.value);
-      var dot = el("circle", {cx:cx, cy:cy, r:4, class:"actual-dot"});
+      var dot = el("circle", {cx:cx, cy:cy, r:4, class:"actual-dot", style:"fill:" + cssVar("--series-red")});
       svg.appendChild(dot);
       var hit = el("circle", {cx:cx, cy:cy, r:14, class:"hit"});
       hit.addEventListener("mouseenter", function(){
