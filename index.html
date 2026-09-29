@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>EBITDA Gap 대시보드</title>
-<meta name="description" content="7월 EBITDA 기준, 액션아이템 실행에 따른 EBITDA 갭 추이와 목표(0%, +10%) 대비 진행 상황">
+<meta name="description" content="6월 EBITDA 기준, 액션아이템 실행에 따른 EBITDA 갭 추이와 목표(0%, +10%) 대비 진행 상황">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
   :root{
@@ -179,35 +175,33 @@
   footer a{color:var(--text-secondary);}
 </style>
 
-</head>
-<body>
 <div class="wrap">
   <header class="page-head">
     <span class="eyebrow">뽀득 · EBITDA 총력전</span>
     <h1>EBITDA Gap 대시보드</h1>
-    <p class="subhead">2026년 7월 EBITDA를 기준점으로, 액션아이템이 실행되면서 손익분기(0%)와 목표(+10%)까지의 갭이 얼마나 줄어드는지 보여줍니다.</p>
+    <p class="subhead">2026년 6월 EBITDA를 기준점으로, 액션아이템이 실행되면서 손익분기(0%)와 목표(+10%)까지의 갭이 얼마나 줄어드는지 보여줍니다.</p>
   </header>
 
   <div class="tiles">
     <div class="tile">
-      <span class="label">7월 EBITDA율 (기준점)</span>
-      <span class="value">-6.6%</span>
-      <span class="delta critical">EBITDA -138백만원</span>
+      <span class="label">6월 EBITDA율 (기준점)</span>
+      <span class="value">-7.6%</span>
+      <span class="delta critical">EBITDA -158백만원</span>
     </div>
     <div class="tile">
       <span class="label">확정 반영 후</span>
-      <span class="value">-6.5%</span>
+      <span class="value">-7.5%</span>
       <span class="delta good">+0.1%p 개선</span>
     </div>
     <div class="tile">
       <span class="label">0% 도달까지</span>
-      <span class="value">6.5%p</span>
+      <span class="value">7.5%p</span>
       <span class="delta critical">아직 부족</span>
     </div>
     <div class="tile">
       <span class="label">파이프라인 전체 반영 시</span>
-      <span class="value">+12.7%</span>
-      <span class="delta good">목표 +10% 대비 +2.7%p</span>
+      <span class="value">+11.1%</span>
+      <span class="delta good">목표 +10% 대비 +1.1%p</span>
     </div>
   </div>
 
@@ -235,29 +229,29 @@
   <section class="panel">
     <div class="panel-head">
       <div>
-        <p class="panel-title">EBITDA 브릿지 — 7월 기준 누적 효과</p>
-        <p class="panel-note">노션 [EBITDA 총력전]Action Item 41건, Drop 제외 · 시작 전 포함 전체 반영 · 2026년 9월 28일 스냅샷</p>
+        <p class="panel-title">파이프라인 전체 달성 예상 vs 실제 반영 — EBITDA 추이</p>
+        <p class="panel-note" id="gapNote">노션 [EBITDA 총력전]Action Item 34건, Drop 제외 · 2026년 9월 29일부터 주간 누적 추적 시작</p>
       </div>
       <div class="legend">
-        <span class="key" style="color:var(--series-orange)"><span class="swatch" style="background:var(--series-orange)"></span>7월 기준</span>
-        <span class="key" style="color:var(--series-aqua)"><span class="swatch" style="background:var(--series-aqua)"></span>확정 반영 (+0.1%p)</span>
-        <span class="key" style="color:var(--series-yellow)"><span class="swatch" style="background:var(--series-yellow)"></span>파이프라인 (+19.2%p)</span>
-        <span class="key" style="color:var(--series-blue)"><span class="swatch dash"></span>목표 +10%</span>
+        <span class="key" style="color:var(--series-orange)"><span class="swatch" style="background:var(--series-orange)"></span>실제 임팩트 반영 EBITDA</span>
+        <span class="key" style="color:var(--series-blue)"><span class="swatch dash"></span>파이프라인 전체 달성 시 예상 EBITDA (+11.1%)</span>
+        <span class="key" style="color:var(--text-muted)"><span class="swatch dash"></span>6월 기준 (베이스라인, -7.6%)</span>
         <span class="key" style="color:var(--baseline)"><span class="swatch solid-line"></span>손익분기 0%</span>
+        <span class="key" style="color:var(--series-yellow)"><span class="swatch" style="background:var(--series-yellow)"></span>Gap</span>
       </div>
     </div>
-    <div class="chart-scroll"><svg class="chart" id="chartBridge" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="EBITDA 브릿지 차트"></svg></div>
-    <button class="table-toggle" data-target="tableBridge">표로 보기</button>
-    <div class="table-wrap" id="tableBridge" hidden></div>
+    <div class="chart-scroll"><svg class="chart" id="chartGap" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="파이프라인 전체 달성 예상 EBITDA 대비 실제 반영 EBITDA Gap 차트"></svg></div>
+    <button class="table-toggle" data-target="tableGap">표로 보기</button>
+    <div class="table-wrap" id="tableGap" hidden></div>
   </section>
 
   <div class="callout">
     <span>⚠️</span>
-    <span><b>주의:</b> 이 브릿지는 7월을 고정 기준점으로 두고 액션아이템만의 누적 효과를 보여주는 계획용 지표입니다. BBR의 실제 월별 EBITDA(예: 9월 추정 -10.9%)는 계절성·매출 변동 등 다른 요인으로도 움직이므로, 위 브릿지의 확정·파이프라인 단계와 실제 월별 실적이 그대로 일치하지는 않습니다.</span>
+    <span><b>주의:</b> 실제(주황) 선은 노션 상태가 '임팩트 적용 완료'로 바뀐 항목만 누적 집계합니다. 파란 점선(+11.1%)은 파이프라인(진행중 포함 전체) 항목이 모두 실현됐을 때의 예상 EBITDA율로, 위쪽 "파이프라인 전체 반영 시" 타일과 같은 값입니다. 두 값은 노션의 월 EBITDA 임팩트 합계가 바뀌면 함께 갱신됩니다.</span>
   </div>
 
   <footer>
-    환산 기준: 2026년 7월 매출액 약 2,091백만원 (EBITDA -138백만원 ÷ EBITDA율 -6.6%로 역산) · 약 20.9백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 확정 반영 = 임팩트 적용 완료만(200만원) · 파이프라인 = 업무 완료 + 진행중 + 선검토 진행중 + pending + 시작 전(4억 243만원)
+    환산 기준: 2026년 6월 매출액 약 2,079백만원 (EBITDA -158백만원 ÷ EBITDA율 -7.6%로 역산) · 약 20.8백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 확정 반영 = 임팩트 적용 완료만(200만원) · 파이프라인 = 업무 완료 + 진행중 + 선검토 진행중 + pending(3억 8,580만원)
   </footer>
 </div>
 
@@ -289,11 +283,20 @@
       ]
     }
   };
-  var bridge = [
-    {label:"7월 기준", from:0, to:-6.6, kind:"total", detail:"BBR 확정 실적"},
-    {label:"+ 확정 반영", from:-6.6, to:-6.5, kind:"aqua", detail:"임팩트 적용완료만 · 200만원 · +0.1%p"},
-    {label:"+ 파이프라인 전체", from:-6.5, to:12.7, kind:"yellow", detail:"업무완료 + 진행중 + 선검토진행중 + pending + 시작 전 · 4억 243만원 · +19.2%p"}
-  ];
+  // gapTrack.points grows by one entry every Monday: the scheduled weekly refresh
+  // computes that week's cumulative "임팩트 적용완료" sum from Notion and appends
+  // {label, value, cum, detail} to the end of this array — prior points are never
+  // edited or removed, so this is a running history. Week labels follow the BBR
+  // dashboard's own convention: "<월>월W<ISO주차>", where <월> is whichever month
+  // has more weekdays in that Mon–Fri business week (e.g. the week of 9/28–10/2
+  // is ISO week 40 and falls mostly in September, so it's "9월W40").
+  var gapTrack = {
+    target: 11.1, // 파이프라인 전체(진행중 포함) 항목이 모두 실현됐을 때의 예상 EBITDA%. 노션 합계가 바뀌면 이 값도 다시 계산해서 넣어줄 것.
+    points: [
+      {label:"6월 기준", value:-7.6, cum:0, detail:"BBR 확정 실적 (베이스라인)"},
+      {label:"9월W40", value:-7.5, cum:2000000, detail:"임팩트 적용완료 누적 200만원 · +0.1%p"}
+    ]
+  };
 
   var NS = "http://www.w3.org/2000/svg";
   function el(tag, attrs){
@@ -407,86 +410,119 @@
     });
   });
 
-  // ---------- Chart B: bridge ----------
+  // ---------- Chart B: target vs actual Gap ----------
   (function(){
-    var svg = document.getElementById("chartBridge");
-    var W = 760, H = 300, padL = 40, padR = 74, padT = 16, padB = 34;
+    var svg = document.getElementById("chartGap");
+    var pts = gapTrack.points;
+    var target = gapTrack.target;
+    var W = 760, H = 300, padL = 40, padR = 90, padT = 16, padB = 30;
     var plotW = W - padL - padR, plotH = H - padT - padB;
-    var yMin = -10, yMax = 15;
-    var yTicks = [-10,-5,0,5,10,15];
-    var n = bridge.length;
-    var slotW = plotW / n;
-    var barW = Math.min(90, slotW*0.5);
 
+    var vals = pts.map(function(p){return p.value;}).concat([target]);
+    var yMax = Math.ceil((Math.max.apply(null, vals)+3)/5)*5;
+    var yMin = Math.floor((Math.min.apply(null, vals)-3)/5)*5;
+    var yTicks = [];
+    for (var t=yMin; t<=yMax; t+=5) yTicks.push(t);
+
+    function xFor(i){ return pts.length>1 ? padL + (i/(pts.length-1)) * plotW : padL + plotW/2; }
     function yFor(v){ return padT + (yMax - v) / (yMax - yMin) * plotH; }
-    function xCenter(i){ return padL + slotW*i + slotW/2; }
 
-    yTicks.forEach(function(t){
-      var y = yFor(t);
-      svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:y, y2:y, class: t===0 ? "zero-line" : "axis-line"}));
+    yTicks.forEach(function(tk){
+      var y = yFor(tk);
+      svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:y, y2:y, class: tk===0 ? "zero-line" : "axis-line"}));
       var lbl = el("text", {x:padL-8, y:y+3.5, class:"tick-label", "text-anchor":"end"});
-      lbl.textContent = t + "%";
+      lbl.textContent = tk + "%";
       svg.appendChild(lbl);
     });
 
-    var yTarget = yFor(10);
+    // Gap shading: area between the flat target line and the actual line
+    var gapPath = "M" + xFor(0).toFixed(1) + "," + yFor(target).toFixed(1);
+    pts.forEach(function(p,i){ gapPath += " L" + xFor(i).toFixed(1) + "," + yFor(p.value).toFixed(1); });
+    gapPath += " L" + xFor(pts.length-1).toFixed(1) + "," + yFor(target).toFixed(1) + " Z";
+    var gapFill = el("path", {d:gapPath, fill:cssVar("--series-yellow"), opacity:0.16, stroke:"none"});
+    svg.appendChild(gapFill);
+
+    var yTarget = yFor(target);
     svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yTarget, y2:yTarget, class:"target-line"}));
     var targetLbl = el("text", {x:W-padR+6, y:yTarget+3.5, class:"ref-label"});
     targetLbl.setAttribute("fill", cssVar("--series-blue"));
-    targetLbl.textContent = "목표 +10%";
+    targetLbl.textContent = "파이프라인 전체 예상 +" + target + "%";
     svg.appendChild(targetLbl);
+
     var zeroLbl = el("text", {x:W-padR+6, y:yFor(0)+3.5, class:"ref-label"});
     zeroLbl.setAttribute("fill", cssVar("--baseline"));
     zeroLbl.textContent = "0%";
     svg.appendChild(zeroLbl);
 
-    var colorMap = {total:"--series-orange", aqua:"--series-aqua", yellow:"--series-yellow"};
+    // baseline reference line (6월 기준) so the improvement-from-baseline is visible
+    // at a glance even once more weekly points are added to the right
+    var baseVal = pts[0].value;
+    var yBase = yFor(baseVal);
+    svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yBase, y2:yBase, stroke:cssVar("--text-muted"), "stroke-width":1.5, "stroke-dasharray":"2 3"}));
+    var baseLbl = el("text", {x:W-padR+6, y:yBase+3.5, class:"ref-label"});
+    baseLbl.setAttribute("fill", cssVar("--text-muted"));
+    baseLbl.textContent = pts[0].label + " " + (baseVal>0?"+":"") + baseVal + "%";
+    svg.appendChild(baseLbl);
 
-    bridge.forEach(function(b, i){
-      var cx = xCenter(i);
-      var top = Math.max(b.from, b.to), bottom = Math.min(b.from, b.to);
-      var yTop = yFor(top), yBottom = yFor(bottom);
-      var h = Math.max(2, yBottom - yTop);
-      var rect = el("rect", {
-        x:cx-barW/2, y:yTop, width:barW, height:h, rx:4,
-        fill: cssVar(colorMap[b.kind])
-      });
-      svg.appendChild(rect);
-
-      // connector from previous bar's "to" level
-      if (i>0){
-        var prevX = xCenter(i-1) + barW/2;
-        var yConn = yFor(b.from);
-        svg.appendChild(el("line", {x1:prevX, x2:cx-barW/2, y1:yConn, y2:yConn, stroke:cssVar("--text-muted"), "stroke-width":1, "stroke-dasharray":"3 3"}));
-      }
-
-      // value label at top of bar
-      var vy = yTop - 8;
-      var lbl = el("text", {x:cx, y:vy, class:"value-label", "text-anchor":"middle"});
-      lbl.textContent = (b.to>0?"+":"") + b.to + "%";
+    pts.forEach(function(p, i){
+      var x = xFor(i);
+      var lbl = el("text", {x:x, y:H-padB+16, class:"tick-label", "text-anchor":"middle"});
+      lbl.textContent = p.label;
       svg.appendChild(lbl);
+    });
 
-      // x-axis category label (two lines)
-      var catLbl = el("text", {x:cx, y:H-padB+16, class:"tick-label", "text-anchor":"middle"});
-      catLbl.textContent = b.label;
-      svg.appendChild(catLbl);
+    var d = pts.map(function(p,i){ return (i===0?"M":"L") + xFor(i).toFixed(1) + "," + yFor(p.value).toFixed(1); }).join(" ");
+    svg.appendChild(el("path", {d:d, class:"actual-line"}));
 
-      var hit = el("rect", {x:cx-barW/2, y:padT, width:barW, height:plotH, class:"bar-hit"});
+    var lastI = pts.length-1;
+    var lastGap = target - pts[lastI].value;
+    var lastX = xFor(lastI), lastY = yFor(pts[lastI].value);
+    // Place the current-value label above the dot by default, centered on it
+    // (not off to the side, where the target/zero/baseline reference labels
+    // live in the right margin) — unless that would crowd the target line,
+    // in which case drop it below the dot instead.
+    var endY = (lastY - 10 - yTarget > 12) ? lastY - 10 : lastY + 16;
+    var endLbl = el("text", {x:lastX, y:endY, class:"value-label", "text-anchor":"middle"});
+    endLbl.setAttribute("fill", cssVar("--series-orange"));
+    endLbl.textContent = (pts[lastI].value>0?"+":"") + pts[lastI].value + "%";
+    svg.appendChild(endLbl);
+
+    // Gap label sits centered within the shaded area (not in the right margin,
+    // which is reserved for the target/zero/baseline reference labels).
+    var gapMidX = (xFor(0) + lastX) / 2;
+    var gapLbl = el("text", {x:gapMidX, y:(lastY+yTarget)/2 + 4, class:"value-label", "text-anchor":"middle"});
+    gapLbl.setAttribute("fill", cssVar("--series-yellow"));
+    gapLbl.textContent = "Gap " + lastGap.toFixed(1) + "%p";
+    svg.appendChild(gapLbl);
+
+    var cross = el("line", {x1:0,x2:0,y1:padT,y2:H-padB,stroke:cssVar("--text-muted"),"stroke-width":1,"stroke-dasharray":"3 3",opacity:0});
+    svg.appendChild(cross);
+
+    pts.forEach(function(p,i){
+      var cx = xFor(i), cy = yFor(p.value);
+      var dot = el("circle", {cx:cx, cy:cy, r:4, class:"actual-dot"});
+      svg.appendChild(dot);
+      var hit = el("circle", {cx:cx, cy:cy, r:14, class:"hit"});
       hit.addEventListener("mouseenter", function(){
-        rect.setAttribute("opacity", 0.85);
-        var svgRect = svg.getBoundingClientRect();
-        var scale = svgRect.width / W;
-        showTooltip(svgRect.left + cx*scale, svgRect.top + yTop*scale, "<b>" + b.label + "</b><br>" + b.detail + "<br>누적 EBITDA율: <b>" + (b.to>0?"+":"") + b.to + "%</b>");
+        dot.classList.add("hover");
+        cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.setAttribute("opacity", 1);
+        var rect = svg.getBoundingClientRect();
+        var scale = rect.width / W;
+        var gap = target - p.value;
+        showTooltip(rect.left + cx*scale, rect.top + cy*scale, "<b>" + p.label + "</b> · EBITDA " + (p.value>0?"+":"") + p.value + "%<br>" + p.detail + "<br>파이프라인 예상 대비 Gap: <b>" + gap.toFixed(1) + "%p</b>");
       });
-      hit.addEventListener("mouseleave", function(){ rect.setAttribute("opacity", 1); hideTooltip(); });
+      hit.addEventListener("mouseleave", function(){
+        dot.classList.remove("hover"); cross.setAttribute("opacity", 0); hideTooltip();
+      });
       svg.appendChild(hit);
     });
 
-    var t = document.getElementById("tableBridge");
-    var rows = bridge.map(function(b){
-      return "<tr><td>" + b.label + "</td><td>" + (b.to>0?"+":"") + b.to + "%</td><td>" + b.detail + "</td></tr>";
+    var t2 = document.getElementById("tableGap");
+    var rows = pts.map(function(p){
+      var gap = target - p.value;
+      return "<tr><td>" + p.label + "</td><td>" + p.cum.toLocaleString("ko-KR") + "원</td><td>" + (p.value>0?"+":"") + p.value + "%</td><td>" + gap.toFixed(1) + "%p</td><td>" + p.detail + "</td></tr>";
     }).join("");
-    t.innerHTML = "<table><caption>EBITDA 브릿지 단계별 누적치</caption><thead><tr><th>단계</th><th>누적 EBITDA율</th><th>비고</th></tr></thead><tbody>" + rows + "</tbody></table>";
+    t2.innerHTML = "<table><caption>파이프라인 전체 예상(+" + target + "%) 대비 실제 반영 추이</caption><thead><tr><th>시점</th><th>누적 확정 임팩트</th><th>실제 EBITDA율</th><th>예상 대비 Gap</th><th>비고</th></tr></thead><tbody>" + rows + "</tbody></table>";
   })();
 
   // table toggles
@@ -501,5 +537,4 @@
 })();
 </script>
 
-</body>
-</html>
+</body></html>
