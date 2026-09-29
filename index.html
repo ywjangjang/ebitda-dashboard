@@ -187,7 +187,7 @@
 
   <div class="tiles">
     <div class="tile">
-      <span class="label">6월 EBITDA율 실텬타))</span>
+      <span class="label">6월 EBITDA율 (기준점)</span>
       <span class="value">-7.6%</span>
       <span class="delta critical">EBITDA -158백만원</span>
     </div>
@@ -237,8 +237,8 @@
       </div>
       <div class="legend">
         <span class="key" style="color:var(--series-red)"><span class="swatch" style="background:var(--series-red)"></span>실제 반영 임팩트 기준 EBITDA</span>
-        <span class="key" style="color:var(--series-yellow)"><span class="swatch dash"></span>파이프라인 전체 달성 시 예상 EBITDA (+11.9%)</span>
-        <span class="key" style="color:var(--text-muted)"><span class="swatch dash"></span>6월 기준 (베이스라인, -7.6%)</span>
+        <span class="key" style="color:var(--series-yellow)"><span class="swatch dash"></span>예상 임팩트 기준 EBITDA (완료 3건, -7.1%)</span>
+        <span class="key" style="color:var(--series-blue)"><span class="swatch dash"></span>목표: 파이프라인 전체 달성 시 예상 EBITDA (+11.9%)</span>
         <span class="key" style="color:var(--baseline)"><span class="swatch solid-line"></span>손익분기 0%</span>
         <span class="key" style="color:var(--text-muted)"><span class="swatch" style="background:var(--text-muted)"></span>Gap</span>
       </div>
@@ -250,11 +250,11 @@
 
   <div class="callout">
     <span>⚠️</span>
-    <span><b>주의:</b> 노란 점선(+11.9%)은 노션의 "(예상) 월 EBITDA 임팩트" — Drop 제외 44건 전체를 다 실현했을 때 원래 기대했던 EBITDA율입니다. 빨간 실선은 "(실제) 월 EBITDA 임팩트"가 입력된 항목만 반영합니다 — 지금은 '임팩트 적용 완료' 3건을 포함해 이 필드가 아직 아무 항목에도 입력되지 않아서 실제 선이 베이스라인에 그대로 머물러 있어요. 담당자가 실제 수치를 입력하면 다음 갱신부터 반영됩니다.</span>
+    <span><b>주의:</b> 파란 점선(+11.9%)은 '목표' — 노션의 "(예상) 월 EBITDA 임팩트"를 Drop 제외 44건 전체 다 실현했을 때 기대되는 EBITDA율입니다. 노란 점선 '예상 임팩트 기준 EBITDA'는 이 중 상태가 '임팩트 적용 완료'인 3건의 (예상) 합계(1,000만원)만 반영한 값으로, 아직 실제 수치가 들어오지 않은 항목의 기대치를 먼저 보여줍니다. 빨간 실선은 "(실제) 월 EBITDA 임팩트"가 실제로 입력된 항목만 반영합니다 — 지금은 '임팩트 적용 완료' 3건을 포함해 이 필드가 아직 아무 항목에도 입력되지 않아서 실제 선이 베이스라인에 그대로 머물러 있어요. 담당자가 실제 수치를 입력하면 다음 갱신부터 반영됩니다.</span>
   </div>
 
   <footer>
-    환산 기준: 2026년 6월 매출액 약 2,079백만원 (EBITDA -158백만원 ÷ EBITDA율 -7.6%로 역산) · 약 20.8백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 파이프라인 전체 예상 = Drop 제외 44건의 "(예상) 월 EBITDA 임팩트" 합계(4억 569만원) · 실제 반영 = "(실제) 월 EBITDA 임팩트"가 입력된 항목 합계(현재 0원, 미입력)
+    환산 기준: 2026년 6월 매출액 약 2,079백만원 (EBITDA -158백만원 ÷ EBITDA율 -7.6%로 역산) · 약 20.8백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 목표(파이프라인 전체 예상) = Drop 제외 44건의 "(예상) 월 EBITDA 임팩트" 합계(4억 569만원) · 예상 임팩트 기준 = 상태 '임팩트 적용 완료' 3건의 "(예상) 월 EBITDA 임팩트" 합계(1,000만원) · 실제 반영 = "(실제) 월 EBITDA 임팩트"가 입력된 항목 합계(현재 0원, 미입력)
   </footer>
 </div>
 
@@ -298,6 +298,13 @@
   // for the whole pipeline, not what's actually been confirmed.
   var gapTrack = {
     target: 11.9, // Drop 제외 전체 항목의 "(예상) 월 EBITDA 임팩트" 합계 기준. 노션 합계가 바뀌면 이 값도 다시 계산해서 넣어줄 것.
+    expectedFromCompleted: {
+      // 상태가 "임팩트 적용 완료"인 항목만의 "(예상) 월 EBITDA 임팩트" 합계를 베이스라인에 반영한 참고값.
+      // 완료 건수나 합계가 바뀌면 value/amount/count를 다시 계산해서 넣어줄 것.
+      value: -7.1,
+      amount: 10000000,
+      count: 3
+    },
     points: [
       {label:"6월 기준", value:-7.6, cum:0, detail:"BBR 확정 실적 (베이스라인)"},
       {label:"9월W40", value:-7.6, cum:0, detail:"(실제) 월 EBITDA 임팩트 필드가 아직 어느 항목에도 입력되지 않음 — 임팩트 적용완료 3건 포함"}
@@ -424,7 +431,7 @@
     var W = 760, H = 300, padL = 40, padR = 128, padT = 16, padB = 30;
     var plotW = W - padL - padR, plotH = H - padT - padB;
 
-    var vals = pts.map(function(p){return p.value;}).concat([target]);
+    var vals = pts.map(function(p){return p.value;}).concat([target, gapTrack.expectedFromCompleted.value]);
     var yMax = Math.ceil((Math.max.apply(null, vals)+3)/5)*5;
     var yMin = Math.floor((Math.min.apply(null, vals)-3)/5)*5;
     var yTicks = [];
@@ -449,10 +456,10 @@
     svg.appendChild(gapFill);
 
     var yTarget = yFor(target);
-    svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yTarget, y2:yTarget, class:"target-line", style:"stroke:" + cssVar("--series-yellow")}));
+    svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yTarget, y2:yTarget, class:"target-line", style:"stroke:" + cssVar("--series-blue")}));
     var targetLbl = el("text", {x:W-padR+6, y:yTarget+3.5, class:"ref-label"});
-    targetLbl.setAttribute("fill", cssVar("--series-yellow"));
-    targetLbl.textContent = "파이프라인 예상 +" + target + "%";
+    targetLbl.setAttribute("fill", cssVar("--series-blue"));
+    targetLbl.textContent = "목표 +" + target + "%";
     svg.appendChild(targetLbl);
 
     var zeroLbl = el("text", {x:W-padR+6, y:yFor(0)+3.5, class:"ref-label"});
@@ -460,15 +467,19 @@
     zeroLbl.textContent = "0%";
     svg.appendChild(zeroLbl);
 
-    // baseline reference line (6월 기준) so the improvement-from-baseline is visible
-    // at a glance even once more weekly points are added to the right
-    var baseVal = pts[0].value;
-    var yBase = yFor(baseVal);
-    svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yBase, y2:yBase, stroke:cssVar("--text-muted"), "stroke-width":1.5, "stroke-dasharray":"2 3"}));
-    var baseLbl = el("text", {x:W-padR+6, y:yBase+3.5, class:"ref-label"});
-    baseLbl.setAttribute("fill", cssVar("--text-muted"));
-    baseLbl.textContent = pts[0].label + " " + (baseVal>0?"+":"") + baseVal + "%";
-    svg.appendChild(baseLbl);
+    // 예상 임팩트 기준 EBITDA: 상태가 "임팩트 적용 완료"인 항목만의 (예상) 합계를 반영한 참고선.
+    // (6월 기준 베이스라인 참고선은 뺐다 — 실적 자체가 그 지점에서부터 쌓이는 것이라 중복이라는
+    // 피드백에 따름.)
+    var expInfo = gapTrack.expectedFromCompleted;
+    var expVal = expInfo.value;
+    var yExp = yFor(expVal);
+    svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yExp, y2:yExp, "stroke-width":1.5, "stroke-dasharray":"4 4", stroke:cssVar("--series-yellow")}));
+
+    var expLblY = yExp + 3.5;
+    var expLbl = el("text", {x:W-padR+6, y:expLblY, class:"ref-label"});
+    expLbl.setAttribute("fill", cssVar("--series-yellow"));
+    expLbl.textContent = "예상(완료 " + expInfo.count + "건) " + (expVal>0?"+":"") + expVal + "%";
+    svg.appendChild(expLbl);
 
     pts.forEach(function(p, i){
       var x = xFor(i);
@@ -485,9 +496,16 @@
     var lastX = xFor(lastI), lastY = yFor(pts[lastI].value);
     // Place the current-value label above the dot by default, centered on it
     // (not off to the side, where the target/zero/baseline reference labels
-    // live in the right margin) — unless that would crowd the target line,
-    // in which case drop it below the dot instead.
-    var endY = (lastY - 10 - yTarget > 12) ? lastY - 10 : lastY + 16;
+    // live in the right margin) — trying a few candidate offsets and picking
+    // the first that clears the target line, the expected-impact line, the
+    // baseline line, and their (possibly nudged) right-margin label text —
+    // since the last point sits at the plot's right edge, right next to that
+    // margin, and its value can land close to any of those reference values.
+    var endYAvoid = [yTarget, yExp, expLblY];
+    function endYClear(y){ return endYAvoid.every(function(a){ return Math.abs(y - a) > 11; }); }
+    var endYCandidates = [lastY - 10, lastY + 16, lastY - 24, lastY + 30];
+    var endY = endYCandidates.filter(endYClear)[0];
+    if (endY === undefined) endY = lastY + 16;
     var endLbl = el("text", {x:lastX, y:endY, class:"value-label", "text-anchor":"middle"});
     endLbl.setAttribute("fill", cssVar("--series-red"));
     endLbl.textContent = (pts[lastI].value>0?"+":"") + pts[lastI].value + "%";
