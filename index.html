@@ -202,9 +202,9 @@
       <span class="delta critical">아직 부족</span>
     </div>
     <div class="tile">
-      <span class="label">파이프라인 전체 달성 시 예상</span>
-      <span class="value">+11.9%</span>
-      <span class="delta good">목표 +10% 대비 +1.9%p</span>
+      <span class="label" id="tilePipeLbl">파이프라인 전체 달성 시 예상</span>
+      <span class="value" id="tilePipeVal">+11.9%</span>
+      <span class="delta good" id="tilePipeDelta">목표 +10% 대비 +1.9%p</span>
     </div>
   </div>
 
@@ -238,7 +238,8 @@
       <div class="legend">
         <span class="key" style="color:var(--series-red)"><span class="swatch" style="background:var(--series-red)"></span>실제 반영 임팩트 기준 EBITDA</span>
         <span class="key" style="color:var(--series-yellow)"><span class="swatch dash"></span>예상 임팩트 기준 EBITDA (완료 3건, -7.1%)</span>
-        <span class="key" style="color:var(--series-blue)"><span class="swatch dash"></span>목표: 파이프라인 전체 달성 시 예상 EBITDA (+11.9%)</span>
+        <span class="key" id="legendTarget" style="color:var(--series-blue)"><span class="swatch dash"></span>목표: 파이프라인 전체 달성 시 예상 EBITDA (+11.9%)</span>
+        <span class="key" id="legendOrig" style="color:var(--text-muted)" hidden><span class="swatch" style="background:none;border-top:2px dotted currentColor;height:0"></span>최초 목표 (+11.9%)</span>
         <span class="key" style="color:var(--baseline)"><span class="swatch solid-line"></span>손익분기 0%</span>
         <span class="key" style="color:var(--text-muted)"><span class="swatch" style="background:var(--text-muted)"></span>Gap</span>
       </div>
@@ -250,11 +251,11 @@
 
   <div class="callout">
     <span>⚠️</span>
-    <span><b>주의:</b> 파란 점선(+11.9%)은 '목표' — 노션의 "(예상) 월 EBITDA 임팩트"를 Drop 제외 44건 전체 다 실현했을 때 기대되는 EBITDA율입니다. 노란 점선 '예상 임팩트 기준 EBITDA'는 이 중 상태가 '임팩트 적용 완료'인 3건의 (예상) 합계(1,000만원)만 반영한 값으로, 아직 실제 수치가 들어오지 않은 항목의 기대치를 먼저 보여줍니다. 빨간 실선은 "(실제) 월 EBITDA 임팩트"가 실제로 입력된 항목만 반영합니다 — 지금은 '임팩트 적용 완료' 3건을 포함해 이 필드가 아직 아무 항목에도 입력되지 않아서 실제 선이 베이스라인에 그대로 머물러 있어요. 담당자가 실제 수치를 입력하면 다음 갱신부터 반영됩니다.</span>
+    <span><b>주의:</b> 파란 점선은 '목표' — Drop 제외 44건을 전부 실현했을 때 기대되는 EBITDA율입니다. 최초 목표(+11.9%)는 전 항목의 "(예상) 월 EBITDA 임팩트" 합계 기준이고, 이후 "(실제) 월 EBITDA 임팩트"가 입력된 항목은 예상 대신 실제 값으로 바꿔 넣어 매주 <b>조정 목표</b>로 다시 계산합니다(실제가 예상보다 작으면 목표 하향, 크면 상향). 조정이 생기면 최초 목표는 회색 점선으로 남겨 비교할 수 있게 했어요. 노란 점선 '예상 임팩트 기준 EBITDA'는 이 중 상태가 '임팩트 적용 완료'인 3건의 (예상) 합계(1,000만원)만 반영한 값으로, 아직 실제 수치가 들어오지 않은 항목의 기대치를 먼저 보여줍니다. 빨간 실선은 "(실제) 월 EBITDA 임팩트"가 실제로 입력된 항목만 반영합니다 — 지금은 '임팩트 적용 완료' 3건을 포함해 이 필드가 아직 아무 항목에도 입력되지 않아서 실제 선이 베이스라인에 그대로 머물러 있어요. 담당자가 실제 수치를 입력하면 다음 갱신부터 반영됩니다.</span>
   </div>
 
   <footer>
-    환산 기준: 2026년 6월 매출액 약 2,079백만원 (EBITDA -158백만원 ÷ EBITDA율 -7.6%로 역산) · 약 20.8백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 목표(파이프라인 전체 예상) = Drop 제외 44건의 "(예상) 월 EBITDA 임팩트" 합계(4억 569만원) · 예상 임팩트 기준 = 상태 '임팩트 적용 완료' 3건의 "(예상) 월 EBITDA 임팩트" 합계(1,000만원) · 실제 반영 = "(실제) 월 EBITDA 임팩트"가 입력된 항목 합계(현재 0원, 미입력)
+    환산 기준: 2026년 6월 매출액 약 2,079백만원 (EBITDA -158백만원 ÷ EBITDA율 -7.6%로 역산) · 약 20.8백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 최초 목표(파이프라인 전체 예상) = Drop 제외 44건의 "(예상) 월 EBITDA 임팩트" 합계(4억 569만원) · 조정 목표 = 최초 목표 + Σ[(실제) − (예상)] (실제 입력 항목만, 현재 차이 0원) · 예상 임팩트 기준 = 상태 '임팩트 적용 완료' 3건의 "(예상) 월 EBITDA 임팩트" 합계(1,000만원) · 실제 반영 = "(실제) 월 EBITDA 임팩트"가 입력된 항목 합계(현재 0원, 미입력)
   </footer>
 </div>
 
@@ -293,11 +294,18 @@
   // labels follow the BBR dashboard's own convention: "<월>월W<ISO주차>", where
   // <월> is whichever month has more weekdays in that Mon–Fri business week (e.g.
   // the week of 9/28–10/2 is ISO week 40 and falls mostly in September, so it's
-  // "9월W40"). gapTrack.target uses a DIFFERENT field — "(예상) 월 EBITDA 임팩트"
+  // "9월W40"). gapTrack.originalTarget uses a DIFFERENT field — "(예상) 월 EBITDA 임팩트"
   // summed across ALL non-Drop items — since it represents the original estimate
   // for the whole pipeline, not what's actually been confirmed.
+  //
+  // 조정 목표(adjusted target): 실제 수치가 입력된 항목은 예상 대신 실제로 대체한다(양방향 —
+  // 실제가 예상보다 작으면 목표 하향, 크면 상향). 각 point의 varAmt =
+  // Σ[(실제) − (예상)] over 항목 where "(실제) 월 EBITDA 임팩트"가 입력됨 (원 단위, 음수 가능).
+  // 조정 목표 = originalTarget + varAmt / revenueBase × 100. 미입력 항목은 예상치 그대로 유지.
+  // 매주 새 point를 추가할 때 varAmt도 함께 계산해서 넣을 것.
   var gapTrack = {
-    target: 11.9, // Drop 제외 전체 항목의 "(예상) 월 EBITDA 임팩트" 합계 기준. 노션 합계가 바뀌면 이 값도 다시 계산해서 넣어줄 것.
+    originalTarget: 11.9, // 최초 목표: Drop 제외 전체 항목의 "(예상) 월 EBITDA 임팩트" 합계 기준. 노션 (예상) 합계가 바뀌면 다시 계산해서 넣어줄 것.
+    revenueBase: 2079000000, // 6월 매출액(역산) — 약 2,079만원 = EBITDA율 1%p의 100배
     expectedFromCompleted: {
       // 상태가 "임팩트 적용 완료"인 항목만의 "(예상) 월 EBITDA 임팩트" 합계를 베이스라인에 반영한 참고값.
       // 완료 건수나 합계가 바뀌면 value/amount/count를 다시 계산해서 넣어줄 것.
@@ -306,10 +314,30 @@
       count: 3
     },
     points: [
-      {label:"6월 기준", value:-7.6, cum:0, detail:"BBR 확정 실적 (베이스라인)"},
-      {label:"9월W40", value:-7.6, cum:0, detail:"(실제) 월 EBITDA 임팩트 필드가 아직 어느 항목에도 입력되지 않음 — 임팩트 적용완료 3건 포함"}
+      {label:"6월 기준", value:-7.6, cum:0, varAmt:0, detail:"BBR 확정 실적 (베이스라인)"},
+      {label:"9월W40", value:-7.6, cum:0, varAmt:0, detail:"(실제) 월 EBITDA 임팩트 필드가 아직 어느 항목에도 입력되지 않음 — 임팩트 적용완료 3건 포함"}
     ]
   };
+
+  // 각 point의 조정 목표 계산 (실제 입력분은 예상 대신 실제로 대체, 양방향)
+  gapTrack.points.forEach(function(p){
+    p.target = Math.round((gapTrack.originalTarget + (p.varAmt||0) / gapTrack.revenueBase * 100) * 10) / 10;
+  });
+  (function(){
+    var o = gapTrack.originalTarget;
+    var c = gapTrack.points[gapTrack.points.length-1].target;
+    function sg(v){ return (v>0?"+":"") + v; }
+    var adj = Math.abs(c - o) >= 0.05;
+    document.getElementById("tilePipeVal").textContent = sg(c) + "%";
+    var dl = document.getElementById("tilePipeDelta");
+    var diff = Math.round((c - 10) * 10) / 10;
+    dl.textContent = "목표 +10% 대비 " + sg(diff) + "%p";
+    if (adj) document.getElementById("tilePipeLbl").textContent = "파이프라인 전체 달성 시 예상 (최초 " + sg(o) + "%)";
+    dl.className = "delta " + (diff >= 0 ? "good" : "critical");
+    document.getElementById("legendTarget").lastChild.textContent = (adj ? "조정 목표" : "목표") + ": 파이프라인 전체 달성 시 예상 EBITDA (" + sg(c) + "%)";
+    document.getElementById("legendOrig").hidden = !adj;
+    document.getElementById("legendOrig").lastChild.textContent = "최초 목표 (" + sg(o) + "%)";
+  })();
 
   var NS = "http://www.w3.org/2000/svg";
   function el(tag, attrs){
@@ -423,15 +451,19 @@
     });
   });
 
-  // ---------- Chart B: target vs actual Gap ----------
+  // ---------- Chart B: adjusted target vs actual Gap ----------
   (function(){
     var svg = document.getElementById("chartGap");
     var pts = gapTrack.points;
-    var target = gapTrack.target;
+    var orig = gapTrack.originalTarget;
     var W = 760, H = 300, padL = 40, padR = 128, padT = 16, padB = 30;
     var plotW = W - padL - padR, plotH = H - padT - padB;
+    function sgn(v){ return (v>0?"+":"") + v; }
+    function won(v){ return (v>0?"+":"") + Math.round(v).toLocaleString("ko-KR") + "원"; }
 
-    var vals = pts.map(function(p){return p.value;}).concat([target, gapTrack.expectedFromCompleted.value]);
+    var vals = pts.map(function(p){return p.value;})
+      .concat(pts.map(function(p){return p.target;}))
+      .concat([orig, gapTrack.expectedFromCompleted.value]);
     var yMax = Math.ceil((Math.max.apply(null, vals)+3)/5)*5;
     var yMin = Math.floor((Math.min.apply(null, vals)-3)/5)*5;
     var yTicks = [];
@@ -448,42 +480,60 @@
       svg.appendChild(lbl);
     });
 
-    // Gap shading: area between the flat target line and the actual line
-    var gapPath = "M" + xFor(0).toFixed(1) + "," + yFor(target).toFixed(1);
-    pts.forEach(function(p,i){ gapPath += " L" + xFor(i).toFixed(1) + "," + yFor(p.value).toFixed(1); });
-    gapPath += " L" + xFor(pts.length-1).toFixed(1) + "," + yFor(target).toFixed(1) + " Z";
-    var gapFill = el("path", {d:gapPath, fill:cssVar("--text-muted"), opacity:0.16, stroke:"none"});
-    svg.appendChild(gapFill);
+    var lastI = pts.length-1;
+    var curTarget = pts[lastI].target;
+    var adjusted = Math.abs(curTarget - orig) >= 0.05;
 
-    var yTarget = yFor(target);
-    svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yTarget, y2:yTarget, class:"target-line", style:"stroke:" + cssVar("--series-blue")}));
-    var targetLbl = el("text", {x:W-padR+6, y:yTarget+3.5, class:"ref-label"});
-    targetLbl.setAttribute("fill", cssVar("--series-blue"));
-    targetLbl.textContent = "목표 +" + target + "%";
-    svg.appendChild(targetLbl);
+    // Gap shading: area between the adjusted-target line and the actual line
+    var gapPath = "";
+    pts.forEach(function(p,i){ gapPath += (i===0?"M":" L") + xFor(i).toFixed(1) + "," + yFor(p.target).toFixed(1); });
+    for (var j=lastI; j>=0; j--) gapPath += " L" + xFor(j).toFixed(1) + "," + yFor(pts[j].value).toFixed(1);
+    gapPath += " Z";
+    svg.appendChild(el("path", {d:gapPath, fill:cssVar("--text-muted"), opacity:0.16, stroke:"none"}));
 
-    var zeroLbl = el("text", {x:W-padR+6, y:yFor(0)+3.5, class:"ref-label"});
-    zeroLbl.setAttribute("fill", cssVar("--baseline"));
-    zeroLbl.textContent = "0%";
-    svg.appendChild(zeroLbl);
+    // 최초 목표 (고정, 옅은 회색 점선) — 조정이 생겼을 때만 별도로 표시
+    var yOrig = yFor(orig);
+    var labelYs = [];
+    if (adjusted) {
+      svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yOrig, y2:yOrig, "stroke-width":1.2, "stroke-dasharray":"2 4", stroke:cssVar("--text-muted")}));
+    }
+
+    // 조정 목표선 (주차별로 움직임)
+    var dT = pts.map(function(p,i){ return (i===0?"M":"L") + xFor(i).toFixed(1) + "," + yFor(p.target).toFixed(1); }).join(" ");
+    svg.appendChild(el("path", {d:dT, fill:"none", class:"target-line", style:"stroke:" + cssVar("--series-blue")}));
+    pts.forEach(function(p,i){
+      svg.appendChild(el("circle", {cx:xFor(i), cy:yFor(p.target), r:2.5, fill:cssVar("--series-blue")}));
+    });
+
+    var yTarget = yFor(curTarget);
 
     // 예상 임팩트 기준 EBITDA: 상태가 "임팩트 적용 완료"인 항목만의 (예상) 합계를 반영한 참고선.
-    // (6월 기준 베이스라인 참고선은 뺐다 — 실적 자체가 그 지점에서부터 쌓이는 것이라 중복이라는
-    // 피드백에 따름.)
     var expInfo = gapTrack.expectedFromCompleted;
     var expVal = expInfo.value;
     var yExp = yFor(expVal);
     svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yExp, y2:yExp, "stroke-width":1.5, "stroke-dasharray":"4 4", stroke:cssVar("--series-yellow")}));
 
-    var expLblY = yExp + 3.5;
-    var expLbl = el("text", {x:W-padR+6, y:expLblY, class:"ref-label"});
-    expLbl.setAttribute("fill", cssVar("--series-yellow"));
-    expLbl.textContent = "예상(완료 " + expInfo.count + "건) " + (expVal>0?"+":"") + expVal + "%";
-    svg.appendChild(expLbl);
+    // Right-margin labels, nudged apart so they never overlap
+    var mLabels = [
+      {y:yTarget, text:(adjusted ? "조정 목표 " : "목표 ") + sgn(curTarget) + "%", color:cssVar("--series-blue")},
+      {y:yExp, text:"예상(완료 " + expInfo.count + "건) " + sgn(expVal) + "%", color:cssVar("--series-yellow")},
+      {y:yFor(0), text:"0%", color:cssVar("--baseline")}
+    ];
+    if (adjusted) mLabels.push({y:yOrig, text:"최초 목표 " + sgn(orig) + "%", color:cssVar("--text-muted")});
+    mLabels.sort(function(a,b){ return a.y - b.y; });
+    for (var k=1; k<mLabels.length; k++) {
+      if (mLabels[k].y - mLabels[k-1].y < 12) mLabels[k].y = mLabels[k-1].y + 12;
+    }
+    mLabels.forEach(function(m){
+      var tx = el("text", {x:W-padR+6, y:m.y+3.5, class:"ref-label"});
+      tx.setAttribute("fill", m.color);
+      tx.textContent = m.text;
+      svg.appendChild(tx);
+      labelYs.push(m.y);
+    });
 
     pts.forEach(function(p, i){
-      var x = xFor(i);
-      var lbl = el("text", {x:x, y:H-padB+16, class:"tick-label", "text-anchor":"middle"});
+      var lbl = el("text", {x:xFor(i), y:H-padB+16, class:"tick-label", "text-anchor":"middle"});
       lbl.textContent = p.label;
       svg.appendChild(lbl);
     });
@@ -491,31 +541,23 @@
     var d = pts.map(function(p,i){ return (i===0?"M":"L") + xFor(i).toFixed(1) + "," + yFor(p.value).toFixed(1); }).join(" ");
     svg.appendChild(el("path", {d:d, class:"actual-line", style:"stroke:" + cssVar("--series-red")}));
 
-    var lastI = pts.length-1;
-    var lastGap = target - pts[lastI].value;
+    var lastGap = curTarget - pts[lastI].value;
     var lastX = xFor(lastI), lastY = yFor(pts[lastI].value);
-    // Place the current-value label above the dot by default, centered on it
-    // (not off to the side, where the target/zero/baseline reference labels
-    // live in the right margin) — trying a few candidate offsets and picking
-    // the first that clears the target line, the expected-impact line, the
-    // baseline line, and their (possibly nudged) right-margin label text —
-    // since the last point sits at the plot's right edge, right next to that
-    // margin, and its value can land close to any of those reference values.
-    var endYAvoid = [yTarget, yExp, expLblY];
+    // Current-value label above/below the last dot, avoiding reference lines.
+    var endYAvoid = [yTarget, yExp].concat(adjusted ? [yOrig] : []);
     function endYClear(y){ return endYAvoid.every(function(a){ return Math.abs(y - a) > 11; }); }
     var endYCandidates = [lastY - 10, lastY + 16, lastY - 24, lastY + 30];
     var endY = endYCandidates.filter(endYClear)[0];
     if (endY === undefined) endY = lastY + 16;
     var endLbl = el("text", {x:lastX, y:endY, class:"value-label", "text-anchor":"middle"});
     endLbl.setAttribute("fill", cssVar("--series-red"));
-    endLbl.textContent = (pts[lastI].value>0?"+":"") + pts[lastI].value + "%";
+    endLbl.textContent = sgn(pts[lastI].value) + "%";
     svg.appendChild(endLbl);
 
-    // Gap label sits centered within the shaded area (not in the right margin,
-    // which is reserved for the target/zero/baseline reference labels). Kept in
-    // neutral ink since red/yellow are both already claimed by the actual/target series.
     var gapMidX = (xFor(0) + lastX) / 2;
-    var gapLbl = el("text", {x:gapMidX, y:(lastY+yTarget)/2 + 4, class:"value-label", "text-anchor":"middle"});
+    var midTargetY = (yFor(pts[0].target) + yTarget) / 2;
+    var midActualY = (yFor(pts[0].value) + lastY) / 2;
+    var gapLbl = el("text", {x:gapMidX, y:(midActualY+midTargetY)/2 + 4, class:"value-label", "text-anchor":"middle"});
     gapLbl.setAttribute("fill", cssVar("--text-secondary"));
     gapLbl.textContent = "Gap " + lastGap.toFixed(1) + "%p";
     svg.appendChild(gapLbl);
@@ -527,14 +569,15 @@
       var cx = xFor(i), cy = yFor(p.value);
       var dot = el("circle", {cx:cx, cy:cy, r:4, class:"actual-dot", style:"fill:" + cssVar("--series-red")});
       svg.appendChild(dot);
-      var hit = el("circle", {cx:cx, cy:cy, r:14, class:"hit"});
+      var hit = el("rect", {x:cx-14, y:padT, width:28, height:plotH, class:"hit"});
       hit.addEventListener("mouseenter", function(){
         dot.classList.add("hover");
         cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.setAttribute("opacity", 1);
         var rect = svg.getBoundingClientRect();
         var scale = rect.width / W;
-        var gap = target - p.value;
-        showTooltip(rect.left + cx*scale, rect.top + cy*scale, "<b>" + p.label + "</b> · EBITDA " + (p.value>0?"+":"") + p.value + "%<br>" + p.detail + "<br>파이프라인 예상 대비 Gap: <b>" + gap.toFixed(1) + "%p</b>");
+        var gap = p.target - p.value;
+        var tgtLine = "조정 목표 <b>" + sgn(p.target) + "%</b> (최초 " + sgn(orig) + "%, 실제−예상 " + won(p.varAmt) + ")";
+        showTooltip(rect.left + cx*scale, rect.top + cy*scale, "<b>" + p.label + "</b> · EBITDA " + sgn(p.value) + "%<br>" + p.detail + "<br>" + tgtLine + "<br>조정 목표 대비 Gap: <b>" + gap.toFixed(1) + "%p</b>");
       });
       hit.addEventListener("mouseleave", function(){
         dot.classList.remove("hover"); cross.setAttribute("opacity", 0); hideTooltip();
@@ -544,10 +587,10 @@
 
     var t2 = document.getElementById("tableGap");
     var rows = pts.map(function(p){
-      var gap = target - p.value;
-      return "<tr><td>" + p.label + "</td><td>" + p.cum.toLocaleString("ko-KR") + "원</td><td>" + (p.value>0?"+":"") + p.value + "%</td><td>" + gap.toFixed(1) + "%p</td><td>" + p.detail + "</td></tr>";
+      var gap = p.target - p.value;
+      return "<tr><td>" + p.label + "</td><td>" + p.cum.toLocaleString("ko-KR") + "원</td><td>" + sgn(p.value) + "%</td><td>" + won(p.varAmt) + "</td><td>" + sgn(p.target) + "%</td><td>" + gap.toFixed(1) + "%p</td><td>" + p.detail + "</td></tr>";
     }).join("");
-    t2.innerHTML = "<table><caption>파이프라인 전체 예상(+" + target + "%) 대비 실제 반영 추이</caption><thead><tr><th>시점</th><th>누적 확정 임팩트</th><th>실제 EBITDA율</th><th>예상 대비 Gap</th><th>비고</th></tr></thead><tbody>" + rows + "</tbody></table>";
+    t2.innerHTML = "<table><caption>조정 목표(최초 " + sgn(orig) + "%에서 실제 입력분 대체) 대비 실제 반영 추이</caption><thead><tr><th>시점</th><th>누적 실제 임팩트</th><th>실제 EBITDA율</th><th>실제−예상 차이</th><th>조정 목표</th><th>조정 목표 대비 Gap</th><th>비고</th></tr></thead><tbody>" + rows + "</tbody></table>";
   })();
 
   // table toggles
