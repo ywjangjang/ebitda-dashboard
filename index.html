@@ -211,27 +211,6 @@
   <section class="panel">
     <div class="panel-head">
       <div>
-        <p class="panel-title">EBITDA율 추이 vs 목표</p>
-        <p class="panel-note" id="lineNote">BBR 확정·추정 실적 (2025년 10월 – 2026년 9월(E), 월별)</p>
-      </div>
-      <div class="legend">
-        <span class="key" style="color:var(--series-orange)"><span class="swatch" style="background:var(--series-orange)"></span>실제 EBITDA율</span>
-        <span class="key" style="color:var(--series-blue)"><span class="swatch dash"></span>목표 +10%</span>
-        <span class="key" style="color:var(--baseline)"><span class="swatch solid-line"></span>손익분기 0%</span>
-      </div>
-    </div>
-    <div class="freq-toggle" role="group" aria-label="기간 단위 선택" style="margin-bottom:10px;">
-      <button class="freq-btn" data-freq="monthly" aria-pressed="true">월별</button>
-      <button class="freq-btn" data-freq="weekly" aria-pressed="false">주차별</button>
-    </div>
-    <div class="chart-scroll"><svg class="chart" id="chartLine" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="EBITDA율 추이 차트"></svg></div>
-    <button class="table-toggle" data-target="tableLine">표로 보기</button>
-    <div class="table-wrap" id="tableLine" hidden></div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-head">
-      <div>
         <p class="panel-title">파이프라인 전체 달성 예상 vs 실제 반영 — EBITDA 추이</p>
         <p class="panel-note" id="gapNote">노션 [EBITDA 총력전]Action Item 44건, Drop 제외 · (예상)/(실제) 필드 분리 반영 · 2026년 9월 29일부터 주간 누적 추적 시작</p>
       </div>
@@ -265,28 +244,6 @@
 (function(){
   "use strict";
 
-  var series = {
-    monthly: {
-      note: "BBR 확정·추정 실적 (2025년 10월 – 2026년 9월(E), 월별)",
-      caption: "월별 EBITDA율 (매출 대비 %)",
-      colLabel: "월",
-      data: [
-        ["25.10",-15.8],["25.11",-8.8],["25.12",-31.9],["26.1",-3.9],
-        ["26.2",-16.0],["26.3",-38.1],["26.4",-12.3],["26.5",-16.3],
-        ["26.6",-7.6],["26.7",-6.6],["26.8",-21.0],["26.9(E)",-10.9]
-      ]
-    },
-    weekly: {
-      note: "BBR 확정·추정 실적 (2026년 7월 W28 – 9월 W39(E), 주차별)",
-      caption: "주차별 EBITDA율 (매출 대비 %)",
-      colLabel: "주차",
-      data: [
-        ["7월W28",-2.9],["7월W29",-2.5],["7월W30",-9.1],["7월W31",-6.6],
-        ["8월W32",-21.8],["8월W33",-17.1],["8월W34",-19.2],["8월W35",-14.1],
-        ["9월W36(E)",-11.8],["9월W37(E)",-11.5],["9월W38(E)",-10.0],["9월W39(E)",-7.2]
-      ]
-    }
-  };
   // gapTrack.points grows by one entry every Monday: the scheduled weekly refresh
   // sums Notion's "(실제) 월 EBITDA 임팩트" across items where that field has been
   // filled in, and appends {label, value, cum, detail} to the end of this array —
@@ -356,100 +313,6 @@
     tooltip.classList.add("show");
   }
   function hideTooltip(){ tooltip.classList.remove("show"); }
-
-  // ---------- Chart A: line (monthly / weekly toggle) ----------
-  function renderLineChart(freq){
-    var set = series[freq];
-    var months = set.data;
-    var svg = document.getElementById("chartLine");
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
-
-    var W = 760, H = 300, padL = 40, padR = 74, padT = 16, padB = 30;
-    var plotW = W - padL - padR, plotH = H - padT - padB;
-    var vals = months.map(function(m){return m[1];});
-    var minVal = Math.min.apply(null, vals);
-    var yMax = 15;
-    var yMin = Math.floor((minVal-2)/10)*10;
-    var yTicks = [];
-    for (var t=0; t<=yMax; t+=10) yTicks.push(t);
-    for (var t2=-10; t2>=yMin; t2-=10) yTicks.push(t2);
-    yTicks.sort(function(a,b){return a-b;});
-
-    function xFor(i){ return padL + (i/(months.length-1)) * plotW; }
-    function yFor(v){ return padT + (yMax - v) / (yMax - yMin) * plotH; }
-
-    yTicks.forEach(function(tk){
-      var y = yFor(tk);
-      svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:y, y2:y, class: tk===0 ? "zero-line" : "axis-line"}));
-      var lbl = el("text", {x:padL-8, y:y+3.5, class:"tick-label", "text-anchor":"end"});
-      lbl.textContent = tk + "%";
-      svg.appendChild(lbl);
-    });
-
-    var yTarget = yFor(10);
-    svg.appendChild(el("line", {x1:padL, x2:W-padR, y1:yTarget, y2:yTarget, class:"target-line"}));
-    var targetLbl = el("text", {x:W-padR+6, y:yTarget+3.5, class:"ref-label"});
-    targetLbl.setAttribute("fill", cssVar("--series-blue"));
-    targetLbl.textContent = "목표 +10%";
-    svg.appendChild(targetLbl);
-
-    var zeroLbl = el("text", {x:W-padR+6, y:yFor(0)+3.5, class:"ref-label"});
-    zeroLbl.setAttribute("fill", cssVar("--baseline"));
-    zeroLbl.textContent = "0%";
-    svg.appendChild(zeroLbl);
-
-    months.forEach(function(m, i){
-      var x = xFor(i);
-      var lbl = el("text", {x:x, y:H-padB+16, class:"tick-label", "text-anchor":"middle"});
-      lbl.textContent = m[0].replace("(E)","");
-      svg.appendChild(lbl);
-    });
-
-    var d = months.map(function(m,i){ return (i===0?"M":"L") + xFor(i).toFixed(1) + "," + yFor(m[1]).toFixed(1); }).join(" ");
-    svg.appendChild(el("path", {d:d, class:"actual-line"}));
-
-    var lastI = months.length-1;
-    var endLbl = el("text", {x:xFor(lastI)+8, y:yFor(months[lastI][1])+4, class:"value-label"});
-    endLbl.setAttribute("fill", cssVar("--series-orange"));
-    endLbl.textContent = months[lastI][1] + "%";
-    svg.appendChild(endLbl);
-
-    var cross = el("line", {x1:0,x2:0,y1:padT,y2:H-padB,stroke:cssVar("--text-muted"),"stroke-width":1,"stroke-dasharray":"3 3",opacity:0});
-    svg.appendChild(cross);
-
-    months.forEach(function(m,i){
-      var cx = xFor(i), cy = yFor(m[1]);
-      var dot = el("circle", {cx:cx, cy:cy, r:4, class:"actual-dot"});
-      svg.appendChild(dot);
-      var hit = el("circle", {cx:cx, cy:cy, r:14, class:"hit"});
-      hit.addEventListener("mouseenter", function(){
-        dot.classList.add("hover");
-        cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.setAttribute("opacity", 1);
-        var rect = svg.getBoundingClientRect();
-        var scale = rect.width / W;
-        showTooltip(rect.left + cx*scale, rect.top + cy*scale, "<b>" + m[0] + "</b> · EBITDA " + m[1] + "%");
-      });
-      hit.addEventListener("mouseleave", function(){
-        dot.classList.remove("hover"); cross.setAttribute("opacity", 0); hideTooltip();
-      });
-      svg.appendChild(hit);
-    });
-
-    document.getElementById("lineNote").textContent = set.note;
-
-    var tEl = document.getElementById("tableLine");
-    var rows = months.map(function(m){ return "<tr><td>" + m[0] + "</td><td>" + m[1] + "%</td></tr>"; }).join("");
-    tEl.innerHTML = "<table><caption>" + set.caption + "</caption><thead><tr><th>" + set.colLabel + "</th><th>EBITDA율</th></tr></thead><tbody>" + rows + "</tbody></table>";
-  }
-
-  renderLineChart("monthly");
-  document.querySelectorAll(".freq-btn").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      document.querySelectorAll(".freq-btn").forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
-      btn.setAttribute("aria-pressed", "true");
-      renderLineChart(btn.dataset.freq);
-    });
-  });
 
   // ---------- Chart B: adjusted target vs actual Gap ----------
   (function(){
