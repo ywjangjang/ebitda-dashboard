@@ -454,11 +454,11 @@
     if (lastY <= yExp) { actLblY = clearOfRefs(lastY - 10, -1); expLblY2 = clearOfRefs(yExp + 16, 1); }
     else { actLblY = clearOfRefs(lastY + 16, 1); expLblY2 = clearOfRefs(yExp - 10, -1); }
     var endLbl = el("text", {x:lastX, y:actLblY, class:"value-label", "text-anchor":"middle"});
-    endLbl.setAttribute("fill", cssVar("--series-red"));
+    endLbl.style.fill = cssVar("--series-red");
     endLbl.textContent = sgn(pts[lastI].value) + "%";
     svg.appendChild(endLbl);
     var expEndLbl = el("text", {x:lastX, y:expLblY2, class:"value-label", "text-anchor":"middle"});
-    expEndLbl.setAttribute("fill", cssVar("--series-yellow"));
+    expEndLbl.style.fill = cssVar("--series-yellow");
     expEndLbl.textContent = sgn(expPts[lastI].value) + "%";
     svg.appendChild(expEndLbl);
 
@@ -466,7 +466,7 @@
     var midTargetY = (yFor(pts[0].target) + yTarget) / 2;
     var midActualY = (yFor(pts[0].value) + lastY) / 2;
     var gapLbl = el("text", {x:gapMidX, y:(midActualY+midTargetY)/2 + 4, class:"value-label", "text-anchor":"middle"});
-    gapLbl.setAttribute("fill", cssVar("--text-secondary"));
+    gapLbl.style.fill = cssVar("--text-secondary");
     gapLbl.textContent = "Gap " + lastGap.toFixed(1) + "%p (월 약 " + amt(pts[lastI].gapAmt) + ")";
     svg.appendChild(gapLbl);
 
@@ -496,7 +496,7 @@
     var t2 = document.getElementById("tableGap");
     var rows = pts.map(function(p, i){
       var gap = p.target - p.value;
-      return "<tr><td>" + p.label + "</td><td>" + p.cum.toLocaleString("ko-KR") + "원</td><td>" + sgn(p.value) + "%</td><td>" + sgn(expPts[i].value) + "%</td><td>" + won(p.varAmt) + "</td><td>" + sgn(p.target) + "% (월 " + amt(p.targetAmt) + ")</td><td>" + gap.toFixed(1) + "%p (월 " + amt(p.gapAmt) + ")</td><td>" + p.detail + "</td></tr>";
+      return "<tr><td>" + p.label + "</td><td>" + p.cum.toLocaleString("ko-KR") + "원</td><td style=\"color:var(--series-red);font-weight:600\">" + sgn(p.value) + "%</td><td style=\"color:var(--series-yellow);font-weight:600\">" + sgn(expPts[i].value) + "%</td><td>" + won(p.varAmt) + "</td><td style=\"color:var(--series-blue);font-weight:600\">" + sgn(p.target) + "% (월 " + amt(p.targetAmt) + ")</td><td>" + gap.toFixed(1) + "%p (월 " + amt(p.gapAmt) + ")</td><td>" + p.detail + "</td></tr>";
     }).join("");
     t2.innerHTML = "<table><caption>조정 목표(최초 " + sgn(orig) + "%에서 실제 입력분 대체) 대비 실제 반영 추이</caption><thead><tr><th>시점</th><th>누적 실제 임팩트</th><th>실제 EBITDA율</th><th>예상 임팩트 기준</th><th>실제−예상 차이</th><th>조정 목표</th><th>조정 목표 대비 Gap</th><th>비고</th></tr></thead><tbody>" + rows + "</tbody></table>";
   })();
