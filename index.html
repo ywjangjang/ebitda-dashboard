@@ -234,11 +234,11 @@
 
   <div class="callout">
     <span>⚠️</span>
-    <span><b>주의:</b> 파란 점선은 '목표' — Drop 제외 44건을 전부 실현했을 때 기대되는 EBITDA율입니다. 최초 목표(+11.9%)는 전 항목의 "(예상) 월 EBITDA 임팩트" 합계 기준이고, 이후 "(실제) 월 EBITDA 임팩트"가 입력된 항목은 예상 대신 실제 값으로 바꿔 넣어 매주 <b>조정 목표</b>로 다시 계산합니다(실제가 예상보다 작으면 목표 하향, 크면 상향). 조정이 생기면 최초 목표는 회색 점선으로 남겨 비교할 수 있게 했어요. 빨간 실선('실제 반영 임팩트 기준')과 노란 점선('예상 임팩트 기준')은 둘 다 6월 기준(완료 항목 0건)에서 시작해 매주 한 점씩 쌓이는 선이에요 — 노란 선은 상태가 '임팩트 적용 완료'인 항목의 "(예상)" 값만 반영합니다(현재 3건, 1,000만원). 빨간 실선은 "(실제) 월 EBITDA 임팩트"가 실제로 입력된 항목만 반영합니다 — 지금은 '임팩트 적용 완료' 3건을 포함해 이 필드가 아직 아무 항목에도 입력되지 않아서 실제 선이 베이스라인에 그대로 머물러 있어요. 담당자가 실제 수치를 입력하면 다음 갱신부터 반영됩니다.</span>
+    <span><b>주의:</b> 파란 점선은 '목표' — Drop 제외 <span id="cItems">-</span>건을 전부 실현했을 때 기대되는 EBITDA율입니다. 최초 목표는 전 항목의 "(예상) 월 EBITDA 임팩트" 합계 기준이고, "(실제)"가 입력된 항목은 예상 대신 실제 값으로 바꿔 넣어 <b>조정 목표</b>로 다시 계산합니다(실제가 예상보다 작으면 하향, 크면 상향). 조정이 생기면 최초 목표는 회색 점선으로 남겨 비교할 수 있게 했어요. 빨간 실선은 "(실제)"가 입력된 항목만, 노란 점선은 상태가 '임팩트 적용 완료'인 항목의 "(예상)" 값만 반영하며, 둘 다 6월 기준에서 시작해 매주 월요일 한 점씩 쌓입니다. <span id="cNow"></span></span>
   </div>
 
   <footer>
-    환산 기준: 2026년 6월 매출액 약 2,079백만원 (EBITDA -158백만원 ÷ EBITDA율 -7.6%로 역산) · 약 20.8백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 최초 목표(파이프라인 전체 예상) = Drop 제외 44건의 "(예상) 월 EBITDA 임팩트" 합계(4억 569만원) · 조정 목표 = 최초 목표 + Σ[(실제) − (예상)] (실제 입력 항목만, 현재 차이 0원) · 예상 임팩트 기준 = 상태 '임팩트 적용 완료' 3건의 "(예상) 월 EBITDA 임팩트" 합계(1,000만원) · 실제 반영 = "(실제) 월 EBITDA 임팩트"가 입력된 항목 합계(현재 0원, 미입력)
+    환산 기준: 2026년 6월 매출액 약 2,079백만원 (EBITDA -158백만원 ÷ EBITDA율 -7.6%로 역산) · 약 20.8백만원의 월 EBITDA 개선 = EBITDA율 +1%p · 최초 목표 = Drop 제외 <span id="fItems">-</span>건의 "(예상) 월 EBITDA 임팩트" 합계(<span id="fExp">-</span>) · 조정 목표 = 최초 목표 + Σ[(실제) − (예상)] (실제 입력 항목만, 현재 <span id="fVar">-</span>) · 예상 임팩트 기준 = 상태 '임팩트 적용 완료' 항목의 (예상) 합계 · 실제 반영 = (실제)가 입력된 항목 합계 · 데이터: 노션에서 매주 월요일 09:00 자동 갱신 (기준일 <span id="fAsOf">-</span>)
   </footer>
 </div>
 
@@ -248,51 +248,55 @@
 (function(){
   "use strict";
 
-  // gapTrack.points grows by one entry every Monday: the scheduled weekly refresh
-  // sums Notion's "(실제) 월 EBITDA 임팩트" across items where that field has been
-  // filled in, and appends {label, value, cum, detail} to the end of this array —
-  // prior points are never edited or removed, so this is a running history. Week
-  // labels follow the BBR dashboard's own convention: "<월>월W<ISO주차>", where
-  // <월> is whichever month has more weekdays in that Mon–Fri business week (e.g.
-  // the week of 9/28–10/2 is ISO week 40 and falls mostly in September, so it's
-  // "9월W40"). gapTrack.originalTarget uses a DIFFERENT field — "(예상) 월 EBITDA 임팩트"
-  // summed across ALL non-Drop items — since it represents the original estimate
-  // for the whole pipeline, not what's actually been confirmed.
-  //
-  // 조정 목표(adjusted target): 실제 수치가 입력된 항목은 예상 대신 실제로 대체한다(양방향 —
-  // 실제가 예상보다 작으면 목표 하향, 크면 상향). 각 point의 varAmt =
-  // Σ[(실제) − (예상)] over 항목 where "(실제) 월 EBITDA 임팩트"가 입력됨 (원 단위, 음수 가능).
-  // 조정 목표 = originalTarget + varAmt / revenueBase × 100. 미입력 항목은 예상치 그대로 유지.
-  // 매주 새 point를 추가할 때 varAmt도 함께 계산해서 넣을 것.
-  var gapTrack = {
-    originalTarget: 11.9, // 최초 목표: Drop 제외 전체 항목의 "(예상) 월 EBITDA 임팩트" 합계 기준. 노션 (예상) 합계가 바뀌면 다시 계산해서 넣어줄 것.
-    originalTargetAmt: 405690000, // 최초 목표의 금액: Drop 제외 전체 "(예상) 월 EBITDA 임팩트" 합계(원). originalTarget과 함께 갱신할 것.
-    baselineEbitda: -158000000, // 6월 EBITDA(원) — 0% 도달까지 필요한 금액 계산용
-    revenueBase: 2079000000, // 6월 매출액(역산) — 약 2,079만원 = EBITDA율 1%p의 100배
-    points: [
-      {label:"6월 기준", value:-7.6, cum:0, varAmt:0, detail:"BBR 확정 실적 (베이스라인)"},
-      {label:"9월W40", value:-7.6, cum:0, varAmt:0, detail:"(실제) 월 EBITDA 임팩트 필드가 아직 어느 항목에도 입력되지 않음 — 임팩트 적용완료 3건 포함"}
-    ],
-    // expectedPoints: points와 같은 라벨·길이로 매주 한 점씩 쌓임. 상태가 "임팩트 적용 완료"인 항목의
-    // "(예상) 월 EBITDA 임팩트" 합계를 반영. 6월 기준은 완료 항목 0건이라 points[0]과 같은 값에서 시작.
-    expectedPoints: [
-      {label:"6월 기준", value:-7.6, cum:0, detail:"기준 시점 — 완료된 항목 없음"},
-      {label:"9월W40", value:-7.1, cum:10000000, detail:"상태 '임팩트 적용 완료' 3건의 (예상) 합계 1,000만원 반영"}
-    ]
-  };
-
-  // 각 point의 조정 목표 계산 (실제 입력분은 예상 대신 실제로 대체, 양방향)
-  // 금액 표기: 1억 이상은 "X.X억", 미만은 "X,XXX만"
+  // 데이터는 data.json에서 읽는다. data.json은 GitHub Actions(.github/workflows/update-data.yml)가
+  // 매주 월요일 09:00 KST에 노션 [EBITDA 총력전] Action Item DB를 읽어 갱신한다(scripts/update_data.py).
+  // 각 point: expTotal(Drop 제외 전체 (예상) 합계), varAmt(Σ[(실제)−(예상)], 실제 입력 항목만),
+  // actualCum(Σ(실제)), doneExp(Σ(예상), 상태=임팩트 적용 완료) — 모두 원 단위 월 EBITDA 개선액.
   function amt(w){
     var a = Math.abs(w), sgnS = w < 0 ? "-" : "";
     if (a >= 1e8) return sgnS + (a/1e8).toFixed(1) + "억";
     if (a >= 1e4) return sgnS + Math.round(a/1e4).toLocaleString("ko-KR") + "만";
     return sgnS + Math.round(a).toLocaleString("ko-KR") + "원";
   }
+  // "4억 569만원" 식 표기
+  function amtKo(w){
+    var a = Math.round(Math.abs(w)), sgnS = w < 0 ? "-" : "";
+    var eok = Math.floor(a / 1e8), man = Math.round((a % 1e8) / 1e4);
+    if (!eok && !man) return a ? sgnS + a.toLocaleString("ko-KR") + "원" : "0원";
+    return sgnS + (eok ? eok + "억" + (man ? " " : "") : "") + (man ? man.toLocaleString("ko-KR") + "만" : "") + "원";
+  }
+  function buildGapTrack(d){
+    var c = d.config, R = c.revenue;
+    function rate(w){ return Math.round((c.baseRate + w / R * 100) * 10) / 10; }
+    var P = d.points, L = P[P.length-1];
+    return {
+      rate: rate,
+      originalTarget: rate(L.expTotal),
+      originalTargetAmt: L.expTotal,
+      baselineEbitda: c.baseEbitda,
+      revenueBase: R,
+      goalRate: c.goalRate,
+      points: P.map(function(p, i){
+        return {label:p.label, value:rate(p.actualCum), cum:p.actualCum, varAmt:p.varAmt, expTotal:p.expTotal,
+          detail: i === 0 ? "BBR 확정 실적 (베이스라인)"
+            : (p.actualCount ? "(실제) 입력 " + p.actualCount + "건 · 누적 " + amtKo(p.actualCum) : "(실제) 월 EBITDA 임팩트 입력 항목 없음")};
+      }),
+      expectedPoints: P.map(function(p, i){
+        return {label:p.label, value:rate(p.doneExp), cum:p.doneExp,
+          detail: i === 0 ? "기준 시점 — 완료된 항목 없음"
+            : "상태 '임팩트 적용 완료' " + p.doneCount + "건의 (예상) 합계 " + amtKo(p.doneExp)};
+      })
+    };
+  }
+
+  function render(d){
+  var gapTrack = buildGapTrack(d);
+
+  // 각 point의 조정 목표 (실제 입력분은 예상 대신 실제로 대체, 양방향)
   gapTrack.points.forEach(function(p){
-    p.targetAmt = gapTrack.originalTargetAmt + (p.varAmt||0);   // 조정 목표의 월 EBITDA 개선액
-    p.gapAmt = p.targetAmt - p.cum;                              // 조정 목표까지 남은 금액
-    p.target = Math.round((gapTrack.originalTarget + (p.varAmt||0) / gapTrack.revenueBase * 100) * 10) / 10;
+    p.targetAmt = p.expTotal + (p.varAmt||0);   // 조정 목표의 월 EBITDA 개선액
+    p.gapAmt = p.targetAmt - p.cum;             // 조정 목표까지 남은 금액
+    p.target = gapTrack.rate(p.targetAmt);
   });
   (function(){
     var o = gapTrack.originalTarget;
@@ -316,8 +320,8 @@
     document.getElementById("tileZeroVal").textContent = (zeroPp > 0 ? zeroPp : 0).toFixed(1) + "%p";
     document.getElementById("tileZeroAmt").textContent = zeroAmt > 0 ? "월 약 " + amt(zeroAmt) : "도달 완료";
     var dl = document.getElementById("tilePipeDelta");
-    var diff = Math.round((c - 10) * 10) / 10;
-    dl.textContent = "목표 +10% 대비 " + sg(diff) + "%p";
+    var diff = Math.round((c - gapTrack.goalRate) * 10) / 10;
+    dl.textContent = "목표 +" + gapTrack.goalRate + "% 대비 " + sg(diff) + "%p";
     dl.className = "delta " + (diff >= 0 ? "good" : "critical");
     document.getElementById("legendTarget").lastChild.textContent = (adj ? "조정 목표" : "목표") + ": 파이프라인 전체 달성 시 예상 EBITDA (" + sg(c) + "%)";
     document.getElementById("legendOrig").hidden = !adj;
@@ -496,6 +500,26 @@
     }).join("");
     t2.innerHTML = "<table><caption>조정 목표(최초 " + sgn(orig) + "%에서 실제 입력분 대체) 대비 실제 반영 추이</caption><thead><tr><th>시점</th><th>누적 실제 임팩트</th><th>실제 EBITDA율</th><th>예상 임팩트 기준</th><th>실제−예상 차이</th><th>조정 목표</th><th>조정 목표 대비 Gap</th><th>비고</th></tr></thead><tbody>" + rows + "</tbody></table>";
   })();
+
+  // 설명 문구의 숫자
+  (function(){
+    var L = d.points[d.points.length-1];
+    document.getElementById("gapNote").textContent = "노션 [EBITDA 총력전]Action Item " + L.itemCount + "건, Drop 제외 · (예상)/(실제) 필드 분리 반영 · 매주 월요일 자동 갱신 · 기준일 " + d.asOf;
+    document.getElementById("cItems").textContent = L.itemCount;
+    document.getElementById("cNow").textContent = "현재 '임팩트 적용 완료' " + L.doneCount + "건(예상 " + amtKo(L.doneExp) + "), (실제) 입력 " + L.actualCount + "건" + (L.actualCount ? "(" + amtKo(L.actualCum) + ")" : "") + ".";
+    document.getElementById("fItems").textContent = L.itemCount;
+    document.getElementById("fExp").textContent = amtKo(L.expTotal);
+    document.getElementById("fVar").textContent = amtKo(L.varAmt);
+    document.getElementById("fAsOf").textContent = d.asOf;
+  })();
+  }
+
+  fetch("data.json?t=" + Date.now(), {cache: "no-store"})
+    .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(render)
+    .catch(function(e){
+      document.getElementById("gapNote").textContent = "데이터(data.json)를 불러오지 못했어요: " + e.message;
+    });
 
   // table toggles
   document.querySelectorAll(".table-toggle").forEach(function(btn){

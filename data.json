@@ -1,0 +1,14 @@
+{
+  "config": {
+    "baseLabel": "6월 기준",
+    "baseRate": -7.6,
+    "baseEbitda": -158000000,
+    "revenue": 2079000000,
+    "goalRate": 10
+  },
+  "asOf": "2026-09-29",
+  "points": [
+    {"label": "6월 기준", "expTotal": 405690000, "varAmt": 0, "actualCum": 0, "actualCount": 0, "doneExp": 0, "doneCount": 0, "itemCount": 44},
+    {"label": "9월W40", "expTotal": 405690000, "varAmt": 0, "actualCum": 0, "actualCount": 0, "doneExp": 10000000, "doneCount": 3, "itemCount": 44}
+  ]
+}
