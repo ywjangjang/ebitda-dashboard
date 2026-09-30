@@ -1,0 +1,50 @@
+name: 노션 데이터 주간 갱신
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"   # 매주 월요일 09:00 KST (UTC 00:00). GitHub 사정으로 몇 분~수십 분 늦을 수 있음
+  workflow_dispatch:       # Actions 탭의 "Run workflow" 버튼으로 수동 실행
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 노션에서 읽어 data.json 갱신
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python scripts/update_data.py
+
+      - name: 바뀐 게 있으면 커밋
+        id: commit
+        run: |
+          if git diff --quiet data.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "자동 갱신 $(TZ=Asia/Seoul date +%F): 노션 Action Item 반영"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: GitHub Pages 재배포 요청
+        if: steps.commit.outputs.changed == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
