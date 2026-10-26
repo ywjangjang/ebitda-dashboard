@@ -6,7 +6,7 @@
     "revenue": 2079000000,
     "goalRate": 10
   },
-  "asOf": "2026-10-19",
+  "asOf": "2026-10-26",
   "points": [
     {
       "label": "6월 기준",
@@ -56,6 +56,16 @@
       "actualCount": 13,
       "doneExp": 82200000,
       "doneCount": 6,
+      "itemCount": 41
+    },
+    {
+      "label": "10월W44",
+      "expTotal": 386950000,
+      "varAmt": -102341913,
+      "actualCum": 142608087,
+      "actualCount": 17,
+      "doneExp": 86200000,
+      "doneCount": 7,
       "itemCount": 41
     }
   ]
